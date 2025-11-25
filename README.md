@@ -1,4 +1,4 @@
-# RRD10-SAS Monorepo
+# Accounting Software Monorepo
 
 A monorepo setup using pnpm workspaces with shared validation schemas.
 
