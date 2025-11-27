@@ -1,28 +1,41 @@
 import { Document, model, Schema, Types } from "mongoose";
-
-/**
- * User document interface
- */
-export interface IUser extends Document {
-  _id: Types.ObjectId;
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  role: "admin" | "user" | "accountant";
-  company?: Types.ObjectId;
-  isActive: boolean;
-  isEmailVerified: boolean;
-  lastLogin?: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { IUser } from "../shared/interface/IUser";
 
 /**
  * User schema
  */
 const userSchema = new Schema<IUser>(
   {
+    companyId: {
+      type: Schema.Types.ObjectId,
+      required: [true, "Company ID is required"],
+      ref: "Company",
+    },
+    role: {
+      type: String,
+      required: [true, "Role is required"],
+      enum: {
+        values: ["Owner", "Admin", "Accountant", "User"],
+        message: "{VALUE} is not a valid role",
+      },
+    },
+    first_name: {
+      type: String,
+      required: [true, "First name is required"],
+      trim: true,
+      maxlength: [50, "First name cannot exceed 50 characters"],
+    },
+    last_name: {
+      type: String,
+      required: [true, "Last name is required"],
+      trim: true,
+      maxlength: [50, "Last name cannot exceed 50 characters"],
+    },
+    middle_name: {
+      type: String,
+      trim: true,
+      maxlength: [50, "Middle name cannot exceed 50 characters"],
+    },
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -37,42 +50,32 @@ const userSchema = new Schema<IUser>(
       minlength: [8, "Password must be at least 8 characters"],
       select: false, // Don't include password in queries by default
     },
-    firstName: {
+    phone_number: {
+      type: Number,
+      required: [true, "Phone number is required"],
+    },
+    token: {
       type: String,
-      required: [true, "First name is required"],
-      trim: true,
-      maxlength: [50, "First name cannot exceed 50 characters"],
+      required: [true, "Token is required"],
+      select: false, // Don't include token in queries by default
     },
-    lastName: {
-      type: String,
-      required: [true, "Last name is required"],
-      trim: true,
-      maxlength: [50, "Last name cannot exceed 50 characters"],
-    },
-    role: {
-      type: String,
-      enum: {
-        values: ["admin", "user", "accountant"],
-        message: "{VALUE} is not a valid role",
-      },
-      default: "user",
-    },
-    company: {
-      type: Schema.Types.ObjectId,
-      ref: "Company",
-      default: null,
-    },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
-    },
-    lastLogin: {
+    token_expiry: {
       type: Date,
-      default: null,
+      required: [true, "Token expiry is required"],
+    },
+    username: {
+      type: String,
+      required: [true, "Username is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    last_login_date: {
+      type: Date,
+    },
+    last_activity: {
+      type: Date,
+      required: [true, "Last activity is required"],
     },
   },
   {
@@ -81,24 +84,28 @@ const userSchema = new Schema<IUser>(
       virtuals: true,
       transform: function (doc, ret) {
         // Remove sensitive fields from JSON output
-        const { password, __v, ...rest } = ret;
+        const { password, token, __v, ...rest } = ret;
         return rest;
       },
     },
     toObject: {
       virtuals: true,
     },
-  },
+  }
 );
 
 // Virtual for full name
 userSchema.virtual("fullName").get(function (this: IUser) {
-  return `${this.firstName} ${this.lastName}`;
+  const parts = [this.first_name, this.middle_name, this.last_name].filter(
+    Boolean
+  );
+  return parts.join(" ");
 });
 
 // Index for faster queries
 userSchema.index({ email: 1 });
-userSchema.index({ company: 1 });
+userSchema.index({ username: 1 });
+userSchema.index({ companyId: 1 });
 userSchema.index({ createdAt: -1 });
 
 // Pre-save middleware example (for future use with password hashing)

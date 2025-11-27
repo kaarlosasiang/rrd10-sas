@@ -1,134 +1,107 @@
 import { Document, model, Schema, Types } from "mongoose";
-
-/**
- * Company document interface
- */
-export interface ICompany extends Document {
-  _id: Types.ObjectId;
-  name: string;
-  email: string;
-  phone?: string;
-  address?: {
-    street?: string;
-    city?: string;
-    state?: string;
-    zipCode?: string;
-    country?: string;
-  };
-  taxId?: string;
-  registrationNumber?: string;
-  industry?: string;
-  website?: string;
-  logo?: string;
-  isActive: boolean;
-  settings: {
-    currency: string;
-    timezone: string;
-    fiscalYearStart: number; // Month (1-12)
-    dateFormat: string;
-  };
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { ICompany } from "../shared/interface/ICompany";
 
 /**
  * Company schema
  */
 const companySchema = new Schema<ICompany>(
   {
+    ownerId: {
+      type: Schema.Types.ObjectId,
+      required: [true, "Owner ID is required"],
+      ref: "User",
+    },
     name: {
       type: String,
       required: [true, "Company name is required"],
       trim: true,
       maxlength: [100, "Company name cannot exceed 100 characters"],
     },
-    email: {
+    businessType: {
       type: String,
-      required: [true, "Company email is required"],
-      unique: true,
-      lowercase: true,
+      required: [true, "Business type is required"],
       trim: true,
-      match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
-    },
-    phone: {
-      type: String,
-      trim: true,
-      match: [/^[+]?[\d\s()-]+$/, "Please provide a valid phone number"],
-    },
-    address: {
-      street: {
-        type: String,
-        trim: true,
-      },
-      city: {
-        type: String,
-        trim: true,
-      },
-      state: {
-        type: String,
-        trim: true,
-      },
-      zipCode: {
-        type: String,
-        trim: true,
-      },
-      country: {
-        type: String,
-        trim: true,
-        default: "United States",
-      },
     },
     taxId: {
       type: String,
+      required: [true, "Tax ID is required"],
       trim: true,
       unique: true,
-      sparse: true, // Allow multiple null values
     },
-    registrationNumber: {
-      type: String,
-      trim: true,
-    },
-    industry: {
-      type: String,
-      trim: true,
-    },
-    website: {
-      type: String,
-      trim: true,
-      match: [
-        /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/,
-        "Please provide a valid URL",
+    address: [
+      {
+        street: {
+          type: String,
+          trim: true,
+        },
+        city: {
+          type: String,
+          trim: true,
+        },
+        state: {
+          type: String,
+          trim: true,
+        },
+        zipCode: {
+          type: String,
+          trim: true,
+        },
+        country: {
+          type: String,
+          trim: true,
+        },
+      },
+    ],
+    contact: {
+      type: [
+        {
+          phone: {
+            type: String,
+            trim: true,
+            match: [/^[+]?[\d\s()-]+$/, "Please provide a valid phone number"],
+          },
+          email: {
+            type: String,
+            lowercase: true,
+            trim: true,
+            match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
+          },
+          website: {
+            type: String,
+            trim: true,
+            match: [
+              /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/,
+              "Please provide a valid URL",
+            ],
+          },
+        },
       ],
+      required: [true, "Contact information is required"],
+    },
+    fiscalYearStart: {
+      type: Date,
+      required: [true, "Fiscal year start date is required"],
+    },
+    currency: {
+      type: String,
+      required: [true, "Currency is required"],
+      default: "PESO",
+      uppercase: true,
     },
     logo: {
       type: String,
+      required: [true, "Logo is required"],
+      trim: true,
+    },
+    headerText: {
+      type: String,
+      required: [true, "Header text is required"],
       trim: true,
     },
     isActive: {
       type: Boolean,
+      required: [true, "Active status is required"],
       default: true,
-    },
-    settings: {
-      currency: {
-        type: String,
-        default: "USD",
-        uppercase: true,
-      },
-      timezone: {
-        type: String,
-        default: "America/New_York",
-      },
-      fiscalYearStart: {
-        type: Number,
-        min: 1,
-        max: 12,
-        default: 1, // January
-      },
-      dateFormat: {
-        type: String,
-        default: "MM/DD/YYYY",
-        enum: ["MM/DD/YYYY", "DD/MM/YYYY", "YYYY-MM-DD"],
-      },
     },
   },
   {
@@ -143,19 +116,20 @@ const companySchema = new Schema<ICompany>(
     toObject: {
       virtuals: true,
     },
-  },
+  }
 );
 
-// Virtual for full address
+// Virtual for full address (returns first address if available)
 companySchema.virtual("fullAddress").get(function (this: ICompany) {
-  if (!this.address) return null;
-  const { street, city, state, zipCode, country } = this.address;
+  if (!this.address || this.address.length === 0) return null;
+  const addr = this.address[0];
+  const { street, city, state, zipCode, country } = addr;
   const parts = [street, city, state, zipCode, country].filter(Boolean);
   return parts.length > 0 ? parts.join(", ") : null;
 });
 
 // Indexes for faster queries
-companySchema.index({ email: 1 });
+companySchema.index({ ownerId: 1 });
 companySchema.index({ name: 1 });
 companySchema.index({ taxId: 1 });
 companySchema.index({ isActive: 1 });
