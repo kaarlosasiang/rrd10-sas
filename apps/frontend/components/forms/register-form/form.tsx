@@ -10,10 +10,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { cn } from "@/lib/utils";
-import { signUp } from "@/lib/auth";
+import { signUp } from "@/lib/services/AuthService";
 import { Button } from "@/components/ui/button";
-import { GoogleSignInButton } from "@/components/auth/google-signin-button";
-import { AuthDivider } from "@/components/auth/auth-divider";
+import { GoogleSignInButton } from "@/components/common/auth/google-signin-button";
+import { AuthDivider } from "@/components/common/auth/auth-divider";
 import {
   Field,
   FieldDescription,
@@ -22,33 +22,9 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { userRegistrationSchema } from "@rrd10-sas/validators";
 
-const schema = z
-  .object({
-    firstName: z.string().min(2, "First name must be at least 2 characters"),
-    middleName: z.string().optional(),
-    lastName: z.string().min(2, "Last name must be at least 2 characters"),
-    email: z.string().email("Please enter a valid email address"),
-    username: z.string().min(3, "Username must be at least 3 characters"),
-    phoneNumber: z
-      .string()
-      .min(7, "Phone number must be at least 7 characters"),
-    companyId: z.string().min(1, "Company ID is required"),
-    role: z.string().min(2, "Role is required"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters long"),
-    confirmPassword: z
-      .string()
-      .min(8, "Confirmation password must be at least 8 characters long"),
-    rememberMe: z.boolean().optional(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof userRegistrationSchema>;
 const defaultValues: FormValues = {
   firstName: "",
   middleName: "",
@@ -76,7 +52,7 @@ export function SignupForm({
     reset,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(userRegistrationSchema),
     defaultValues,
   });
 
@@ -251,7 +227,9 @@ export function SignupForm({
                 {...register("role")}
               />
               {errors.role && (
-                <p className="text-sm text-destructive">{errors.role.message}</p>
+                <p className="text-sm text-destructive">
+                  {errors.role.message}
+                </p>
               )}
             </Field>
           </div>

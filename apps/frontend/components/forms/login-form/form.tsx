@@ -4,16 +4,18 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { z } from "zod";
+
+import z from "zod";
+import { userLoginSchema } from "@rrd10-sas/validators";
 
 import { cn } from "@/lib/utils";
-import { signIn } from "@/lib/auth";
+import { signIn } from "@/lib/services/AuthService";
 import { Button } from "@/components/ui/button";
-import { GoogleSignInButton } from "@/components/auth/google-signin-button";
-import { AuthDivider } from "@/components/auth/auth-divider";
+import { GoogleSignInButton } from "@/components/common/auth/google-signin-button";
+import { AuthDivider } from "@/components/common/auth/auth-divider";
 import {
   Field,
   FieldDescription,
@@ -21,18 +23,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 
-const schema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters long")
-    .max(128),
-  rememberMe: z.boolean().optional(),
-});
-
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof userLoginSchema>;
 
 export function LoginForm({
   className,
@@ -47,10 +39,7 @@ export function LoginForm({
     control,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      rememberMe: true,
-    },
+    resolver: zodResolver(userLoginSchema),
   });
 
   const onSubmit = async (values: FormValues) => {
@@ -88,17 +77,7 @@ export function LoginForm({
               <span className="sr-only">RRD10 SAS</span>
             </Link>
             <h1 className="text-xl font-bold">Welcome to RRD10 S.A.S.</h1>
-            <FieldDescription>
-              Don&apos;t have an account?{" "}
-              <Link href="/signup" className="underline">
-                Sign up
-              </Link>
-            </FieldDescription>
           </div>
-
-          {/* Social Login */}
-          <GoogleSignInButton callbackURL="/dashboard" mode="signin" />
-          <AuthDivider />
 
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -131,31 +110,20 @@ export function LoginForm({
             )}
           </Field>
           <Field>
-            <Controller
-              name="rememberMe"
-              control={control}
-              render={({ field }) => (
-                <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Checkbox
-                    id="rememberMe"
-                    checked={field.value}
-                    onCheckedChange={(value) => field.onChange(Boolean(value))}
-                  />
-                  <span>Remember me for faster sign in</span>
-                </label>
-              )}
-            />
-          </Field>
-          <Field>
-            <Button
-              type="submit"
-              className="font-bold"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" className="font-bold" disabled={isSubmitting}>
               {isSubmitting ? "Signing in..." : "Log In"}
             </Button>
+            <FieldDescription className="text-center text-sm">
+              Don&apos;t have an account?{" "}
+              <Link href="/signup" className="underline">
+                Sign up
+              </Link>
+            </FieldDescription>
           </Field>
         </FieldGroup>
+        {/* Social Login */}
+        <AuthDivider />
+        <GoogleSignInButton callbackURL="/dashboard" mode="signin" />
       </form>
       <FieldDescription className="px-6 text-center text-sm">
         By clicking continue, you agree to our{" "}

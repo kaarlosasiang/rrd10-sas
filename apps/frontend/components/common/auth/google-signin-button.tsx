@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/config/auth-client";
 import { Button } from "@/components/ui/button";
 
 interface GoogleSignInButtonProps {

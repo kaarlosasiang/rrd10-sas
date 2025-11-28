@@ -16,6 +16,6 @@ export const {
   signIn,
   signUp,
   signOut,
-  useActiveOrganization,
+  // useActiveOrganization,
 } = authClient;
 
