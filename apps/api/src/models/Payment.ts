@@ -131,26 +131,18 @@ PaymentSchema.pre("save", function () {
   if (this.paymentType === PaymentType.RECEIVED) {
     // Payment received: must have customerId and invoiceIds
     if (!this.customerId) {
-      throw new Error(
-        "Customer ID is required for received payments",
-      );
+      throw new Error("Customer ID is required for received payments");
     }
     if (!this.invoiceIds || this.invoiceIds.length === 0) {
-      throw new Error(
-        "At least one invoice is required for received payments",
-      );
+      throw new Error("At least one invoice is required for received payments");
     }
   } else if (this.paymentType === PaymentType.MADE) {
     // Payment made: must have supplierId and billIds
     if (!this.supplierId) {
-      throw new Error(
-        "Supplier ID is required for made payments",
-      );
+      throw new Error("Supplier ID is required for made payments");
     }
     if (!this.billIds || this.billIds.length === 0) {
-      throw new Error(
-        "At least one bill is required for made payments",
-      );
+      throw new Error("At least one bill is required for made payments");
     }
   }
 });
@@ -161,7 +153,8 @@ PaymentSchema.pre("save", function () {
 PaymentSchema.pre("save", async function () {
   if (this.isNew && !this.paymentNumber) {
     const year = new Date().getFullYear();
-    const typePrefix = this.paymentType === PaymentType.RECEIVED ? "PMT-RCV" : "PMT-MADE";
+    const typePrefix =
+      this.paymentType === PaymentType.RECEIVED ? "PMT-RCV" : "PMT-MADE";
     const prefix = `${typePrefix}-${year}-`;
 
     // Find the last payment number for this year and type

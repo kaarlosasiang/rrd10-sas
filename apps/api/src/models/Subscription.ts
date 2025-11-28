@@ -303,7 +303,8 @@ SubscriptionSchema.methods.checkUsageLimit = function (
   resource: keyof ICurrentUsage,
 ): boolean {
   const currentValue = this.currentUsage[resource];
-  const featureKey = `max${resource.charAt(0).toUpperCase() + resource.slice(1)}` as keyof IFeatures;
+  const featureKey =
+    `max${resource.charAt(0).toUpperCase() + resource.slice(1)}` as keyof IFeatures;
   const limit = this.features[featureKey];
 
   if (limit === "unlimited") return true;

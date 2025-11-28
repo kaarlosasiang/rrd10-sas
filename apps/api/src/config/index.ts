@@ -1,5 +1,7 @@
 import dbConnection from "./db";
 
+import "./env";
+
 const constants = {
   // Server
   port: Number(process.env.PORT) || 4000,
@@ -29,6 +31,15 @@ const constants = {
     process.env.CORS_ORIGIN ||
     process.env.FRONTEND_URL ||
     "http://localhost:3000",
+
+  // Better Auth
+  betterAuthSecret: process.env.BETTER_AUTH_SECRET || "dev-better-auth-secret",
+  betterAuthUrl:
+    process.env.BETTER_AUTH_URL ||
+    process.env.API_BASE_URL ||
+    `http://localhost:${Number(process.env.PORT) || 4000}`,
+  googleClientId: process.env.GOOGLE_CLIENT_ID || "",
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
 };
 
 export { constants, dbConnection };

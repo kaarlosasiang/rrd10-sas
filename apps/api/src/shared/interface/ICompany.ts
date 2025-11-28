@@ -6,7 +6,13 @@ export interface ICompany extends Document {
   _id: Types.ObjectId;
   ownerId: Types.ObjectId;
   name: string;
-  businessType: "sole proprietorship" | "partnership" | "corporation" | "non-profit" | "government" | "other";
+  businessType:
+    | "sole proprietorship"
+    | "partnership"
+    | "corporation"
+    | "non-profit"
+    | "government"
+    | "other";
   taxId: string;
   address?: IAddress[];
   contact: Array<{

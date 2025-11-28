@@ -5,7 +5,11 @@ import { AuthorizationError } from "../error-types/authorization.error";
 
 const apiKeyMiddleware = (req: Request, res: Response, next: NextFunction) => {
   // Skip API key check for health endpoints
-  if (req.path === "/health" || req.path === "/") {
+  if (
+    req.path === "/health" ||
+    req.path === "/" ||
+    req.path.startsWith("/api/v1/auth")
+  ) {
     return next();
   }
 

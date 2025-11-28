@@ -53,7 +53,7 @@ export interface IFeatures {
   maxCustomers: number;
   maxSuppliers: number;
   maxInventoryItems: number;
-  
+
   // Feature flags
   inventoryManagement: boolean;
   multiCompany: boolean;
@@ -67,7 +67,7 @@ export interface IFeatures {
   prioritySupport: boolean;
   removeBranding: boolean;
   customLogo: boolean;
-  
+
   // Data
   dataRetentionMonths: number | "unlimited";
   backupFrequency: string | null; // 'daily', 'weekly', null

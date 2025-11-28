@@ -14,4 +14,3 @@ export interface IAccount extends Document {
   createdAt: Date;
   updatedAt?: Date;
 }
-

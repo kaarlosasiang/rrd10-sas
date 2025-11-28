@@ -14,23 +14,25 @@ import logger from "./logger";
 import { constants } from ".";
 
 export default (app: Application): Application => {
-  // Security middleware
-  app.use(helmet());
+  // Security middleware - disable CSP for Better Auth
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    }),
+  );
 
   // CORS configuration
   app.use(
     cors({
       origin: constants.corsOrigin,
       credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
       optionsSuccessStatus: 200,
     }),
   );
 
-  // Body parsing middleware
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-
-  // Cookie parsing
+  // Cookie parsing - Better Auth needs this early
   app.use(cookieParser());
 
   // HTTP request logging (morgan + winston)
@@ -86,12 +88,21 @@ export default (app: Application): Application => {
     });
   });
 
-  // API Key middleware (applied after health checks)
-  app.use(apiKeyMiddleware);
-
-  // Register all API routes
+  // Register Better Auth routes FIRST (before express.json())
   const registerRoutes = require("../routes").default;
   registerRoutes(app);
+
+  // Body parsing middleware - AFTER Better Auth routes
+  // Better Auth handles its own body parsing
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
+  // API Key middleware (applied to non-auth routes only)
+  // Auth routes are already registered and handle their own authentication
+  app.use("/api/v1/users", apiKeyMiddleware);
+  // Add API key middleware to other protected routes as needed
+  // app.use("/api/v1/companies", apiKeyMiddleware);
+  // app.use("/api/v1/clients", apiKeyMiddleware);
 
   // Error logging middleware (before error handlers)
   app.use(errorLogger);

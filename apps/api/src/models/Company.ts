@@ -1,4 +1,5 @@
-import { Document, model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
+
 import { ICompany } from "../shared/interface/ICompany";
 
 /**
@@ -116,7 +117,7 @@ const companySchema = new Schema<ICompany>(
     toObject: {
       virtuals: true,
     },
-  }
+  },
 );
 
 // Virtual for full address (returns first address if available)

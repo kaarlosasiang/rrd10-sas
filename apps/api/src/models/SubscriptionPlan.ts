@@ -1,6 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
-import { BillingCycle, IFeatures, PlanType } from "../shared/interface/ISubscription";
+import {
+  BillingCycle,
+  IFeatures,
+  PlanType,
+} from "../shared/interface/ISubscription";
 import {
   ISubscriptionPlan,
   ISubscriptionPlanDocument,
@@ -132,9 +136,7 @@ SubscriptionPlanSchema.virtual("yearlySavingsPercent").get(function () {
 SubscriptionPlanSchema.methods.getPriceForCycle = function (
   cycle: BillingCycle,
 ): number {
-  return cycle === BillingCycle.MONTHLY
-    ? this.monthlyPrice
-    : this.yearlyPrice;
+  return cycle === BillingCycle.MONTHLY ? this.monthlyPrice : this.yearlyPrice;
 };
 
 /**
@@ -193,8 +195,12 @@ SubscriptionPlanSchema.statics.comparePlans = async function (
   }
 
   return {
-    plan1: plans.find((p: ISubscriptionPlanDocument) => p.planType === planType1),
-    plan2: plans.find((p: ISubscriptionPlanDocument) => p.planType === planType2),
+    plan1: plans.find(
+      (p: ISubscriptionPlanDocument) => p.planType === planType1,
+    ),
+    plan2: plans.find(
+      (p: ISubscriptionPlanDocument) => p.planType === planType2,
+    ),
   };
 };
 

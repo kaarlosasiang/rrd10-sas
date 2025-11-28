@@ -140,9 +140,7 @@ LedgerSchema.statics.getAccountBalance = function (
   return this.findOne({ accountId })
     .sort({ transactionDate: -1, createdAt: -1 })
     .select("runningBalance")
-    .then((doc: ILedgerDocument | null) =>
-      doc ? doc.runningBalance : 0,
-    );
+    .then((doc: ILedgerDocument | null) => (doc ? doc.runningBalance : 0));
 };
 
 /**

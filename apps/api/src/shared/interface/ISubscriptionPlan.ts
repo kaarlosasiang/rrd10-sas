@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 
-import { BillingCycle, IFeatures, PlanType } from "./ISubscription";
+import { IFeatures, PlanType } from "./ISubscription";
 
 /**
  * Subscription Plan Document Interface
@@ -11,21 +11,21 @@ export interface ISubscriptionPlan {
   planType: PlanType;
   planName: string; // 'Free', 'Pro', 'Premium'
   description: string;
-  
+
   // Pricing
   monthlyPrice: number;
   yearlyPrice: number;
   currency: string; // default: 'PHP'
-  
+
   // Features and limits (same structure as Subscription.features)
   features: IFeatures;
-  
+
   // Plan metadata
   isActive: boolean;
   displayOrder: number; // For sorting in UI
   isPopular: boolean; // Highlight as "Most Popular"
   trialDays: number; // Number of trial days offered
-  
+
   createdAt: Date;
   updatedAt: Date;
 }

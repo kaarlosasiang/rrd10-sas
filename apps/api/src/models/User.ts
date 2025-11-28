@@ -1,4 +1,5 @@
-import { Document, model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
+
 import { IUser } from "../shared/interface/IUser";
 
 /**
@@ -91,13 +92,13 @@ const userSchema = new Schema<IUser>(
     toObject: {
       virtuals: true,
     },
-  }
+  },
 );
 
 // Virtual for full name
 userSchema.virtual("fullName").get(function (this: IUser) {
   const parts = [this.first_name, this.middle_name, this.last_name].filter(
-    Boolean
+    Boolean,
   );
   return parts.join(" ");
 });

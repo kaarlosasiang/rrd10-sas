@@ -345,4 +345,7 @@ BackupRecordSchema.statics.getBackupHistory = function (
  */
 export const BackupRecord =
   (mongoose.models.BackupRecord as mongoose.Model<IBackupRecordDocument>) ||
-  mongoose.model<IBackupRecordDocument>("BackupRecord", BackupRecordSchema as any);
+  mongoose.model<IBackupRecordDocument>(
+    "BackupRecord",
+    BackupRecordSchema as any,
+  );

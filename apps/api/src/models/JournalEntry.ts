@@ -218,9 +218,7 @@ JournalEntrySchema.pre("save", async function () {
 /**
  * Instance method: Post the journal entry
  */
-JournalEntrySchema.methods.post = function (
-  userId: mongoose.Types.ObjectId,
-) {
+JournalEntrySchema.methods.post = function (userId: mongoose.Types.ObjectId) {
   if (this.status !== JournalEntryStatus.DRAFT) {
     throw new Error("Only draft entries can be posted");
   }

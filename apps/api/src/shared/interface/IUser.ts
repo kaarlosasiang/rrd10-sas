@@ -3,7 +3,7 @@ import { Document, Types } from "mongoose";
 export interface IUser extends Document {
   _id: Types.ObjectId;
   companyId: Types.ObjectId;
-  role: "owner" | "admin" | "accountant" | "user";
+  role: "Owner" | "Admin" | "Accountant" | "User";
   first_name: string;
   last_name: string;
   middle_name?: string;

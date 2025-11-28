@@ -10,10 +10,11 @@ export default (app: Application): void => {
   // API version prefix
   const API_PREFIX = "/api/v1";
 
-  // Auth routes (public - no API key required)
+  // Auth routes (Better Auth handler - no API key required)
+  // Express v5 syntax: use :splat* for catch-all routes
   app.use(`${API_PREFIX}/auth`, authRoutes);
 
-  // User routes (protected - API key required via middleware in app.ts)
+  // User routes (API key middleware applied in app.ts)
   app.use(`${API_PREFIX}/users`, userRoutes);
 
   // Add more routes here as needed

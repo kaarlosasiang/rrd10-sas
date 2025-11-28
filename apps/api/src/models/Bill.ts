@@ -243,9 +243,7 @@ BillSchema.statics.findByStatus = function (
 /**
  * Static method: Find overdue bills
  */
-BillSchema.statics.findOverdue = function (
-  companyId: mongoose.Types.ObjectId,
-) {
+BillSchema.statics.findOverdue = function (companyId: mongoose.Types.ObjectId) {
   return this.find({
     companyId,
     status: { $in: [BillStatus.OPEN, BillStatus.PARTIAL] },

@@ -1,21 +1,12 @@
+import { toNodeHandler } from "better-auth/node";
 import { Router } from "express";
+
+import { authServer } from "../modules/auth/betterAuth";
 
 const router = Router();
 
-// Example auth routes
-router.post("/login", (req, res) => {
-  // TODO: Implement login logic
-  res.json({ message: "Login endpoint" });
-});
-
-router.post("/register", (req, res) => {
-  // TODO: Implement registration logic
-  res.json({ message: "Register endpoint" });
-});
-
-router.post("/logout", (req, res) => {
-  // TODO: Implement logout logic
-  res.json({ message: "Logout endpoint" });
-});
+// Express v5: Use * wildcard without leading slash for catch-all
+// This catches all routes like /sign-up/email, /sign-in/email, /ok, etc.
+router.all("/*splat", toNodeHandler(authServer));
 
 export default router;

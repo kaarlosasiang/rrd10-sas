@@ -1,8 +1,12 @@
 import { Router } from "express";
 
+import { requireAuth } from "../shared/middleware/auth.middleware";
+
 const router = Router();
 
 // Example user routes
+router.use(requireAuth);
+
 router.get("/", (req, res) => {
   // TODO: Get all users
   res.json({ message: "Get all users" });
