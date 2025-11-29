@@ -47,7 +47,7 @@ export default function ProtectedLayout({
           </div>
           <AnimatedThemeToggler className="cursor-pointer" />
         </header>
-        <div className="flex flex-1 flex-col gap-4 pl-2 pr-4 pt-0">{children}</div>
+        <div className="flex flex-1 flex-col gap-4 pl-2 pr-4 pt-0 pb-2">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

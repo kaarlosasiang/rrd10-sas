@@ -1,16 +1,6 @@
 "use client";
 
 import * as React from "react";
-import {
-  Calculator,
-  FileText,
-  LayoutDashboard,
-  Receipt,
-  Settings2,
-  TrendingUp,
-  Users,
-  Wallet,
-} from "lucide-react";
 
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
@@ -38,7 +28,7 @@ const data = {
     {
       title: "Dashboard",
       url: "/dashboard",
-      icon: LayoutDashboard,
+      icon: "📊",
       isActive: true,
       items: [
         {
@@ -58,7 +48,7 @@ const data = {
     {
       title: "Transactions",
       url: "/transactions",
-      icon: Receipt,
+      icon: "💳",
       items: [
         {
           title: "All Transactions",
@@ -81,7 +71,7 @@ const data = {
     {
       title: "Invoicing",
       url: "/invoices",
-      icon: FileText,
+      icon: "📄",
       items: [
         {
           title: "All Invoices",
@@ -104,7 +94,7 @@ const data = {
     {
       title: "Clients",
       url: "/clients",
-      icon: Users,
+      icon: "👥",
       items: [
         {
           title: "All Clients",
@@ -123,7 +113,7 @@ const data = {
     {
       title: "Financial Reports",
       url: "/reports",
-      icon: TrendingUp,
+      icon: "📈",
       items: [
         {
           title: "Profit & Loss",
@@ -146,7 +136,7 @@ const data = {
     {
       title: "Settings",
       url: "/settings",
-      icon: Settings2,
+      icon: "⚙️",
       items: [
         {
           title: "General",
@@ -171,17 +161,17 @@ const data = {
     {
       name: "Q4 Tax Filing",
       url: "/projects/q4-tax-filing",
-      icon: Calculator,
+      icon: "🧮",
     },
     {
       name: "Annual Audit 2025",
       url: "/projects/annual-audit-2025",
-      icon: FileText,
+      icon: "📋",
     },
     {
       name: "Payroll Management",
       url: "/projects/payroll-management",
-      icon: Wallet,
+      icon: "💰",
     },
   ],
 };
