@@ -115,6 +115,47 @@ const data = {
       ],
     },
     {
+      title: "Suppliers",
+      url: "/suppliers",
+      icon: "🏢",
+      items: [
+        {
+          title: "All Suppliers",
+          url: "/suppliers",
+        },
+      ],
+    },
+    {
+      title: "Bills & Payables",
+      url: "/bills",
+      icon: "📋",
+      items: [
+        {
+          title: "All Bills",
+          url: "/bills",
+        },
+        {
+          title: "Pending",
+          url: "/bills/pending",
+        },
+        {
+          title: "Paid",
+          url: "/bills/paid",
+        },
+      ],
+    },
+    {
+      title: "Payments",
+      url: "/payments",
+      icon: "💰",
+      items: [
+        {
+          title: "All Payments",
+          url: "/payments",
+        },
+      ],
+    },
+    {
       title: "Inventory",
       url: "/inventory",
       icon: "📦",

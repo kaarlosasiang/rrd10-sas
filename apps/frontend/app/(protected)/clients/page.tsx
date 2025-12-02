@@ -52,72 +52,148 @@ import {
 import { ClientForm } from "@/components/forms/client-form/form"
 import { formatCurrency } from "@/lib/utils"
 
+interface Address {
+    street: string
+    city: string
+    state: string
+    zipCode: string
+    country: string
+}
+
 interface Client {
     id: string
-    name: string
+    customerCode: string
+    customerName: string
+    displayName: string
     email: string
     phone: string
-    company: string
+    billingAddress: Address
+    shippingAddress?: Address
+    taxId: string
+    paymentTerms: string
+    creditLimit: number
+    currentBalance: number
     status: "active" | "inactive" | "archived"
     totalInvoiced: number
-    outstandingBalance: number
     lastInvoice: string
 }
 
 const mockClients: Client[] = [
     {
         id: "CLI-001",
-        name: "John Smith",
-        email: "john.smith@abccorp.com",
-        phone: "+1 (555) 123-4567",
-        company: "ABC Corporation",
+        customerCode: "CUST-001",
+        customerName: "Maria's Salon and Spa",
+        displayName: "Maria's Salon",
+        email: "billing@mariasalon.com",
+        phone: "+63 2 1234 5678",
+        billingAddress: {
+            street: "123 Quezon Avenue",
+            city: "Quezon City",
+            state: "Metro Manila",
+            zipCode: "1100",
+            country: "Philippines"
+        },
+        taxId: "123-456-789-000",
+        paymentTerms: "Net 15",
+        creditLimit: 25000.00,
+        currentBalance: 0,
         status: "active",
         totalInvoiced: 15000.00,
-        outstandingBalance: 0,
-        lastInvoice: "2025-11-01"
+        lastInvoice: "2025-11-25"
     },
     {
         id: "CLI-002",
-        name: "Sarah Johnson",
-        email: "sarah.j@xyzind.com",
-        phone: "+1 (555) 234-5678",
-        company: "XYZ Industries",
+        customerCode: "CUST-002",
+        customerName: "Juan's Grocery Store",
+        displayName: "Juan's Grocery",
+        email: "accounts@juangrocery.com",
+        phone: "+63 2 2345 6789",
+        billingAddress: {
+            street: "456 Rizal Street",
+            city: "Manila",
+            state: "Metro Manila",
+            zipCode: "1000",
+            country: "Philippines"
+        },
+        taxId: "234-567-890-000",
+        paymentTerms: "Net 30",
+        creditLimit: 50000.00,
+        currentBalance: 12750.00,
         status: "active",
-        totalInvoiced: 8500.00,
-        outstandingBalance: 3500.00,
+        totalInvoiced: 45000.00,
         lastInvoice: "2025-11-10"
     },
     {
         id: "CLI-003",
-        name: "Michael Chen",
-        email: "m.chen@techsol.com",
-        phone: "+1 (555) 345-6789",
-        company: "Tech Solutions Ltd",
+        customerCode: "CUST-003",
+        customerName: "Tech Solutions Office Complex",
+        displayName: "Tech Solutions Office",
+        email: "finance@techsol.com",
+        phone: "+63 2 3456 7890",
+        billingAddress: {
+            street: "789 Makati Avenue",
+            city: "Makati",
+            state: "Metro Manila",
+            zipCode: "1200",
+            country: "Philippines"
+        },
+        shippingAddress: {
+            street: "789 Makati Avenue, Floor 5",
+            city: "Makati",
+            state: "Metro Manila",
+            zipCode: "1200",
+            country: "Philippines"
+        },
+        taxId: "345-678-901-000",
+        paymentTerms: "Net 30",
+        creditLimit: 30000.00,
+        currentBalance: 5250.00,
         status: "active",
-        totalInvoiced: 25000.00,
-        outstandingBalance: 8750.00,
+        totalInvoiced: 38000.00,
         lastInvoice: "2025-11-15"
     },
     {
         id: "CLI-004",
-        name: "Emily Davis",
-        email: "emily.d@globalent.com",
-        phone: "+1 (555) 456-7890",
-        company: "Global Enterprises",
+        customerCode: "CUST-004",
+        customerName: "Beauty Bar Manila",
+        displayName: "Beauty Bar Manila",
+        email: "ap@beautybar.ph",
+        phone: "+63 2 4567 8901",
+        billingAddress: {
+            street: "321 Ortigas Avenue",
+            city: "Pasig",
+            state: "Metro Manila",
+            zipCode: "1600",
+            country: "Philippines"
+        },
+        taxId: "456-789-012-000",
+        paymentTerms: "Net 15",
+        creditLimit: 15000.00,
+        currentBalance: 1850.00,
         status: "active",
-        totalInvoiced: 12000.00,
-        outstandingBalance: 2250.00,
+        totalInvoiced: 22000.00,
         lastInvoice: "2025-10-20"
     },
     {
         id: "CLI-005",
-        name: "David Wilson",
-        email: "david@startup.io",
-        phone: "+1 (555) 567-8901",
-        company: "Startup Inc",
+        customerCode: "CUST-005",
+        customerName: "Pedro's Carinderia",
+        displayName: "Pedro's Carinderia",
+        email: "billing@pedros.ph",
+        phone: "+63 2 5678 9012",
+        billingAddress: {
+            street: "654 Taft Avenue",
+            city: "Manila",
+            state: "Metro Manila",
+            zipCode: "1004",
+            country: "Philippines"
+        },
+        taxId: "567-890-123-000",
+        paymentTerms: "Net 30",
+        creditLimit: 35000.00,
+        currentBalance: 0,
         status: "inactive",
-        totalInvoiced: 5000.00,
-        outstandingBalance: 0,
+        totalInvoiced: 18000.00,
         lastInvoice: "2025-09-15"
     },
 ]
@@ -132,8 +208,8 @@ export default function ClientsPage() {
 
     const handleExportCSV = () => {
         const csv = [
-            ["Client ID", "Name", "Email", "Phone", "Company", "Status", "Total Invoiced", "Outstanding Balance", "Last Invoice"],
-            ...filteredClients.map(c => [c.id, c.name, c.email, c.phone, c.company, c.status, c.totalInvoiced, c.outstandingBalance, c.lastInvoice])
+            ["Client ID", "Customer Code", "Name", "Display Name", "Email", "Phone", "Tax ID", "Payment Terms", "Status", "Total Invoiced", "Current Balance", "Credit Limit", "Last Invoice"],
+            ...filteredClients.map(c => [c.id, c.customerCode, c.customerName, c.displayName, c.email, c.phone, c.taxId, c.paymentTerms, c.status, c.totalInvoiced, c.currentBalance, c.creditLimit, c.lastInvoice])
         ].map(row => row.join(",")).join("\n")
         const blob = new Blob([csv], { type: "text/csv" })
         const url = window.URL.createObjectURL(blob)
@@ -145,9 +221,10 @@ export default function ClientsPage() {
 
     const filteredClients = clients.filter(client => {
         const matchesSearch =
-            client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            client.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            client.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             client.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            client.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            client.customerCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
             client.id.toLowerCase().includes(searchQuery.toLowerCase())
         const matchesStatus = filterStatus === "all" || client.status === filterStatus
         const matchesDateRange = (!startDate || new Date(client.lastInvoice) >= new Date(startDate)) &&
@@ -158,7 +235,7 @@ export default function ClientsPage() {
     const totalClients = clients.length
     const activeClients = clients.filter(c => c.status === "active").length
     const totalRevenue = clients.reduce((sum, c) => sum + c.totalInvoiced, 0)
-    const totalOutstanding = clients.reduce((sum, c) => sum + c.outstandingBalance, 0)
+    const totalOutstanding = clients.reduce((sum, c) => sum + c.currentBalance, 0)
     
     const activePct = totalClients > 0 ? ((activeClients / totalClients) * 100).toFixed(1) : "0.0"
     const collectionRate = totalRevenue > 0 ? (((totalRevenue - totalOutstanding) / totalRevenue) * 100).toFixed(1) : "0.0"
@@ -352,8 +429,8 @@ export default function ClientsPage() {
                                     <TableRow key={client.id}>
                                         <TableCell>
                                             <div className="flex flex-col">
-                                                <span className="font-medium">{client.name}</span>
-                                                <span className="text-xs text-muted-foreground">{client.id}</span>
+                                                <span className="font-medium">{client.displayName}</span>
+                                                <span className="text-xs text-muted-foreground">{client.customerCode}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell>
@@ -371,15 +448,15 @@ export default function ClientsPage() {
                                         <TableCell>
                                             <div className="flex items-center gap-2">
                                                 <Building2 className="h-4 w-4 text-muted-foreground" />
-                                                <span>{client.company}</span>
+                                                <span>{client.billingAddress.city}, {client.billingAddress.state}</span>
                                             </div>
                                         </TableCell>
                                         <TableCell className="font-semibold">
                                             {formatCurrency(client.totalInvoiced)}
                                         </TableCell>
                                         <TableCell>
-                                            <span className={client.outstandingBalance > 0 ? "text-orange-600 font-semibold" : "text-muted-foreground"}>
-                                                {formatCurrency(client.outstandingBalance)}
+                                            <span className={client.currentBalance > 0 ? "text-orange-600 font-semibold" : "text-muted-foreground"}>
+                                                {formatCurrency(client.currentBalance)}
                                             </span>
                                         </TableCell>
                                         <TableCell>
