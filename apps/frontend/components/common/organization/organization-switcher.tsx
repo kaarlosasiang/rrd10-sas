@@ -35,6 +35,10 @@ export function OrganizationSwitcher({ onCreateNew }: OrganizationSwitcherProps)
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(false);
 
+  if (!organization) {
+    return null;
+  }
+
   useEffect(() => {
     loadOrganizations();
   }, []);

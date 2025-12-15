@@ -1,9 +1,12 @@
-import { AuthNavbar } from "@/components/common/auth-navbar";
-import { Navbar } from "@/components/common/landing-navbar";
-import {LoginForm} from "@/components/forms/login-form/form";
+"use client";
 
+import { AuthNavbar } from "@/components/common/auth-navbar";
+import {LoginForm} from "@/components/forms/login-form/form";
+import { useGuestRoute } from "@/lib/auth/protected-route";
 
 export default function LoginPage() {
+    useGuestRoute();
+    
     return (
         <div className="bg-background flex h-svh flex-col">
             <AuthNavbar/>

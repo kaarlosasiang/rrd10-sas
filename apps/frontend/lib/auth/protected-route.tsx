@@ -26,8 +26,12 @@ export function withAuth<P extends object>(
     const { user, isLoading } = useAuth();
     const router = useRouter();
 
+    console.log("[withAuth] render:", { isLoading, hasUser: !!user, pathname: typeof window !== 'undefined' ? window.location.pathname : 'N/A' });
+
     useEffect(() => {
+      console.log("[withAuth] effect check:", { isLoading, hasUser: !!user });
       if (!isLoading && !user) {
+        console.log("[withAuth] Redirecting to login");
         router.replace(redirectTo);
       }
 
@@ -38,6 +42,7 @@ export function withAuth<P extends object>(
         !allowUnverified &&
         !user.emailVerified
       ) {
+        console.log("[withAuth] Redirecting to verify-email");
         router.replace("/verify-email");
       }
     }, [user, isLoading, router]);
@@ -119,8 +124,12 @@ export function useGuestRoute(options?: { redirectTo?: string }) {
   const { user, isLoading } = useAuth();
   const router = useRouter();
 
+  console.log("[useGuestRoute] check:", { isLoading, hasUser: !!user });
+
   useEffect(() => {
+    console.log("[useGuestRoute] effect:", { isLoading, hasUser: !!user });
     if (!isLoading && user) {
+      console.log("[useGuestRoute] Redirecting to dashboard");
       router.replace(redirectTo);
     }
   }, [user, isLoading, router, redirectTo]);

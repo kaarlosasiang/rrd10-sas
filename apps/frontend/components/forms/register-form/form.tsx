@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { cn } from "@/lib/utils";
-import { signUp } from "@/lib/services/AuthService";
+import { useAuth } from "@/lib/contexts/auth-context";
 import { Button } from "@/components/ui/button";
 import { GoogleSignInButton } from "@/components/common/auth/google-signin-button";
 import { AuthDivider } from "@/components/common/auth/auth-divider";
@@ -47,6 +47,7 @@ export function SignupForm({
   onRegistrationSuccess?: (email: string) => void;
 }) {
   const router = useRouter();
+  const { signUp } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     register,
@@ -65,7 +66,7 @@ export function SignupForm({
   }: FormValues): Promise<void> => {
     setIsSubmitting(true);
     try {
-      await signUp(values);
+      await signUp.email(values);
       toast.success("Account created! Please verify your email.");
       reset(defaultValues);
 

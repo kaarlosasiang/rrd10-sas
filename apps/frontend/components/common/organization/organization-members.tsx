@@ -38,6 +38,17 @@ export function OrganizationMembers() {
   const [inviteRole, setInviteRole] = useState("member");
   const [inviting, setInviting] = useState(false);
 
+  // Early exit while organization features are paused
+  if (!organization) {
+    return (
+      <Alert>
+        <AlertDescription>
+          Organization management is currently disabled.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   useEffect(() => {
     if (organizationId) {
       loadMembers();

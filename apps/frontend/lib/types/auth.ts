@@ -24,7 +24,7 @@ export interface User extends BetterAuthUser {
  * Extended Session type with admin plugin fields
  */
 export interface Session extends BetterAuthSession {
-  impersonatedBy?: string;
+  impersonatedBy?: string | null;
 }
 
 /**

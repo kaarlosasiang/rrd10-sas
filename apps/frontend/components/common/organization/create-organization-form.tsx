@@ -43,6 +43,10 @@ export function CreateOrganizationForm({
   onCancel,
 }: CreateOrganizationFormProps) {
   const { organization } = useOrganization();
+
+  if (!organization) {
+    return null;
+  }
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
