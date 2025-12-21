@@ -8,6 +8,7 @@
     "dev": "pnpm --parallel --filter \"./apps/*\" dev",
     "dev:api": "pnpm --filter api dev",
     "dev:frontend": "pnpm --filter frontend dev",
+    "storybook": "pnpm --filter ui storybook",
     "build": "pnpm --recursive build",
     "build:api": "pnpm --filter api build",
     "build:frontend": "pnpm --filter frontend build",
