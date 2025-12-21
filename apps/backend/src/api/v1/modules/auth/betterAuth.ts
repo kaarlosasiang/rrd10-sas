@@ -89,7 +89,7 @@ export const authServer = betterAuth({
     }),
     admin({
       defaultRole: "user",
-      adminRoles: ["admin", "super_admin"],
+      // adminRoles: ["admin"], // TODO: Configure admin roles properly
       impersonationSessionDuration: 60 * 60, // 1 hour
       defaultBanReason: "Violated terms of service",
       bannedUserMessage:
