@@ -11,7 +11,7 @@ import {
 } from '../shared/middleware/logger.middleware.js';
 
 import logger from './logger.js';
-import { constants } from ".";
+import { constants } from "./index.js";
 
 export default (app: Application): Application => {
   // Security middleware - disable CSP for Better Auth
