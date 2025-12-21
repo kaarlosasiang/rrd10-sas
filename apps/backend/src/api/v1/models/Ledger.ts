@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-import { ILedger, ILedgerDocument } from "../shared/interface/ILedger";
+import { ILedger, ILedgerDocument } from '../shared/interface/ILedger.js';
 
 /**
  * Ledger Schema

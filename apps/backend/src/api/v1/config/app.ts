@@ -4,13 +4,13 @@ import express, { Application } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 
-import apiKeyMiddleware from "../shared/middleware/apiKey.middleware";
+import apiKeyMiddleware from '../shared/middleware/apiKey.middleware.js';
 import {
   errorLogger,
   requestLogger,
-} from "../shared/middleware/logger.middleware";
+} from '../shared/middleware/logger.middleware.js';
 
-import logger from "./logger";
+import logger from './logger.js';
 import { constants } from ".";
 
 export default (app: Application): Application => {

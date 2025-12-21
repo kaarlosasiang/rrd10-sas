@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-import { ICompany } from "../shared/interface/ICompany";
+import { ICompany } from '../shared/interface/ICompany.js';
 
 /**
  * Company schema

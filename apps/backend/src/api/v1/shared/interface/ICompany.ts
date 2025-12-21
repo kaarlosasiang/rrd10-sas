@@ -1,6 +1,6 @@
 import { Document, Types } from "mongoose";
 
-import { IAddress } from "./IAddress";
+import { IAddress } from './IAddress.js';
 
 export interface ICompany extends Document {
   _id: Types.ObjectId;

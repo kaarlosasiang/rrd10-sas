@@ -6,7 +6,7 @@ import {
   IReportParameters,
   ReportFormat,
   ReportType,
-} from "../shared/interface/IReport";
+} from '../shared/interface/IReport.js';
 
 /**
  * Report Parameters Schema

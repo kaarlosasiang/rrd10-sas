@@ -5,7 +5,7 @@ import {
   IPaymentDocument,
   PaymentMethod,
   PaymentType,
-} from "../shared/interface/IPayment";
+} from '../shared/interface/IPayment.js';
 
 /**
  * Payment Schema

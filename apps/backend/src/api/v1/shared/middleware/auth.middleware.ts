@@ -1,8 +1,8 @@
 import { fromNodeHeaders } from "better-auth/node";
 import { NextFunction, Request, Response } from "express";
 
-import { authServer } from "../../modules/auth/betterAuth";
-import { AuthenticationError } from "../error-types/authentcation.error";
+import { authServer } from '../../modules/auth/betterAuth.js';
+import { AuthenticationError } from '../error-types/authentcation.error.js';
 
 export const requireAuth = async (
   req: Request,

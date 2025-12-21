@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { requireAuth } from "../shared/middleware/auth.middleware";
+import { requireAuth } from '../shared/middleware/auth.middleware.js';
 
 const router = Router();
 

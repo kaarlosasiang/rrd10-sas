@@ -1,4 +1,4 @@
-import dbConnection from "./db";
+import dbConnection from './db.js';
 
 import "./env";
 

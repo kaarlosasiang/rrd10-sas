@@ -5,7 +5,7 @@ import {
   IInventoryTransactionDocument,
   InventoryReferenceType,
   InventoryTransactionType,
-} from "../shared/interface/IInventoryTransaction";
+} from '../shared/interface/IInventoryTransaction.js';
 
 /**
  * Inventory Transaction Schema
