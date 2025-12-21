@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Check, ChevronsUpDown, PlusCircle } from "lucide-react";
-import { useOrganization } from "@/hooks/use-organization";
+import { useOrganization, type OrganizationClient } from "@/hooks/use-organization";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,8 +29,12 @@ interface OrganizationSwitcherProps {
  * Organization Switcher Component
  * Allows users to switch between organizations they're a member of
  */
-export function OrganizationSwitcher({ onCreateNew }: OrganizationSwitcherProps) {
+export function OrganizationSwitcher({
+  onCreateNew,
+}: OrganizationSwitcherProps) {
   const { activeOrganization, organization } = useOrganization();
+  const orgClient: OrganizationClient | null = organization;
+  const activeOrg: Organization | null = activeOrganization;
   const [open, setOpen] = useState(false);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(false);
@@ -46,7 +50,7 @@ export function OrganizationSwitcher({ onCreateNew }: OrganizationSwitcherProps)
   const loadOrganizations = async () => {
     try {
       setLoading(true);
-      const result: any = await organization.list();
+      const result: any = await orgClient?.list?.();
       if (result?.data) {
         setOrganizations(result.data);
       }
@@ -59,7 +63,7 @@ export function OrganizationSwitcher({ onCreateNew }: OrganizationSwitcherProps)
 
   const handleSelectOrganization = async (org: Organization) => {
     try {
-      await organization.setActive(org.id);
+      await orgClient?.setActive?.(org.id);
       setOpen(false);
       // Reload page to reflect new active organization
       window.location.reload();
@@ -78,16 +82,16 @@ export function OrganizationSwitcher({ onCreateNew }: OrganizationSwitcherProps)
           aria-label="Select an organization"
           className="w-[250px] justify-between"
         >
-          {activeOrganization ? (
+          {activeOrg ? (
             <div className="flex items-center gap-2">
-              {activeOrganization.logo && (
+              {activeOrg?.logo && (
                 <img
-                  src={activeOrganization.logo}
-                  alt={activeOrganization.name}
+                  src={activeOrg?.logo}
+                  alt={activeOrg?.name}
                   className="h-5 w-5 rounded"
                 />
               )}
-              <span className="truncate">{activeOrganization.name}</span>
+              <span className="truncate">{activeOrg?.name}</span>
             </div>
           ) : (
             "Select organization"
@@ -122,7 +126,7 @@ export function OrganizationSwitcher({ onCreateNew }: OrganizationSwitcherProps)
                   <Check
                     className={cn(
                       "ml-auto h-4 w-4",
-                      activeOrganization?.id === org.id
+                      activeOrg?.id === org.id
                         ? "opacity-100"
                         : "opacity-0"
                     )}
