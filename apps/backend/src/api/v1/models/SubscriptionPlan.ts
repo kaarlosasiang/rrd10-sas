@@ -4,11 +4,11 @@ import {
   BillingCycle,
   IFeatures,
   PlanType,
-} from "../shared/interface/ISubscription";
+} from '../shared/interface/ISubscription.js';
 import {
   ISubscriptionPlan,
   ISubscriptionPlanDocument,
-} from "../shared/interface/ISubscriptionPlan";
+} from '../shared/interface/ISubscriptionPlan.js';
 
 /**
  * Features Schema (reused from Subscription)

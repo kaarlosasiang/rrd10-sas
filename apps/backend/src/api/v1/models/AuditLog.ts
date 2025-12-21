@@ -4,7 +4,7 @@ import {
   AuditAction,
   IAuditLog,
   IAuditLogDocument,
-} from "../shared/interface/IAuditLog";
+} from '../shared/interface/IAuditLog.js';
 
 /**
  * Audit Log Schema

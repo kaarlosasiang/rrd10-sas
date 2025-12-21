@@ -3,9 +3,9 @@ import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { admin, emailOTP, oneTap, organization } from "better-auth/plugins";
 import { MongoClient } from "mongodb";
 
-import { constants } from "../../config";
-import logger from "../../config/logger";
-import { EmailService } from "../../services/email.service";
+import { constants } from '../../config/index.js';
+import logger from '../../config/logger.js';
+import { EmailService } from '../../services/email.service.js';
 
 const mongoClient = new MongoClient(constants.mongodbUri, {
   maxPoolSize: 5,

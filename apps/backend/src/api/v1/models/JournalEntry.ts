@@ -6,7 +6,7 @@ import {
   IJournalEntryLine,
   JournalEntryStatus,
   JournalEntryType,
-} from "../shared/interface/IJournalEntry";
+} from '../shared/interface/IJournalEntry.js';
 
 /**
  * Journal Entry Line Item Schema

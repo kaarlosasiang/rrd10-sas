@@ -5,7 +5,7 @@ import {
   IBill,
   IBillDocument,
   IBillLineItem,
-} from "../shared/interface/IBill";
+} from '../shared/interface/IBill.js';
 
 /**
  * Bill Line Item Schema

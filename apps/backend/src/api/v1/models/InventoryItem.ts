@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 import {
   IInventoryItem,
   IInventoryItemDocument,
-} from "../shared/interface/IInventoryItem";
+} from '../shared/interface/IInventoryItem.js';
 
 /**
  * Inventory Item Schema

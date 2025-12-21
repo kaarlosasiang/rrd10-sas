@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
-import { IAddress } from "../shared/interface/IAddress";
-import { ICustomer, ICustomerDocument } from "../shared/interface/ICustomer";
+import { IAddress } from '../shared/interface/IAddress.js';
+import { ICustomer, ICustomerDocument } from '../shared/interface/ICustomer.js';
 
 /**
  * Address Schema

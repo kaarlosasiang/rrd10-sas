@@ -1,9 +1,9 @@
 import { Application } from "express";
 
-import authRoutes from "./auth.routes";
-import companyRoutes from "./company.routes";
-import subscriptionRoutes from "./subscription.routes";
-import userRoutes from "./user.routes";
+import authRoutes from './auth.routes.js';
+import companyRoutes from './company.routes.js';
+import subscriptionRoutes from './subscription.routes.js';
+import userRoutes from './user.routes.js';
 
 /**
  * Register all API routes

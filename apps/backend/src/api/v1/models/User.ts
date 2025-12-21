@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-import { IUser } from "../shared/interface/IUser";
+import { IUser } from '../shared/interface/IUser.js';
 
 /**
  * User schema

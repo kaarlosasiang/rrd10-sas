@@ -10,7 +10,7 @@ import {
   ISubscriptionDocument,
   PlanType,
   SubscriptionStatus,
-} from "../shared/interface/ISubscription";
+} from '../shared/interface/ISubscription.js';
 
 /**
  * Current Usage Schema

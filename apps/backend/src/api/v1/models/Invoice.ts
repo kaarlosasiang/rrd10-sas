@@ -5,7 +5,7 @@ import {
   IInvoiceDocument,
   IInvoiceLineItem,
   InvoiceStatus,
-} from "../shared/interface/IInvoice";
+} from '../shared/interface/IInvoice.js';
 
 /**
  * Invoice Line Item Schema
