@@ -3,9 +3,9 @@ import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { admin, emailOTP, oneTap, organization } from "better-auth/plugins";
 import { MongoClient } from "mongodb";
 
-import { constants } from '../../config/index.js';
-import logger from '../../config/logger.js';
-import { EmailService } from '../../services/email.service.js';
+import { constants } from "../../config/index.js";
+import logger from "../../config/logger.js";
+import { EmailService } from "../../services/email.service.js";
 
 const mongoClient = new MongoClient(constants.mongodbUri, {
   maxPoolSize: 5,
@@ -17,7 +17,12 @@ export const authServer = betterAuth({
   appUrl: constants.frontEndUrl, // Frontend URL for redirects
   baseURL: constants.betterAuthUrl, // API auth endpoint
   secret: constants.betterAuthSecret,
-  trustedOrigins: [constants.frontEndUrl, constants.corsOrigin],
+  trustedOrigins: [
+    constants.frontEndUrl,
+    constants.corsOrigin,
+    "https://www.amfintrass.com",
+    "https://amfintrass.com",
+  ],
   emailAndPassword: {
     enabled: true,
   },
@@ -41,7 +46,11 @@ export const authServer = betterAuth({
       phone_number: { type: "string", required: false },
       username: { type: "string", required: false },
       // Subscription fields
-      hasActiveSubscription: { type: "boolean", required: false, defaultValue: false },
+      hasActiveSubscription: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+      },
       subscriptionPlan: { type: "string", required: false },
       subscriptionStatus: { type: "string", required: false },
     },
@@ -57,7 +66,7 @@ export const authServer = betterAuth({
     useSecureCookies: constants.nodeEnv === "production",
     defaultCookieAttributes: {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: constants.nodeEnv === "production" ? "none" : "lax",
       secure: constants.nodeEnv === "production",
     },
   },
@@ -105,7 +114,7 @@ export const authServer = betterAuth({
         EmailService.sendVerificationOTP({ email, otp, type }).catch(
           (error) => {
             logger.error("Failed to send OTP email", { error, email, type });
-          }
+          },
         );
       },
       otpLength: 6, // 6-digit OTP

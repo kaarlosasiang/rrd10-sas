@@ -4,16 +4,16 @@ import express, { Application } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 
+import registerRoutes from "../routes/index.js";
 import apiKeyMiddleware from "../shared/middleware/apiKey.middleware.js";
 import {
   errorLogger,
   requestLogger,
 } from "../shared/middleware/logger.middleware.js";
 
+import dbConnection from "./db.js";
 import { constants } from "./index.js";
-import dbConnection from './db.js';
-import logger from './logger.js';
-import registerRoutes from '../routes/index.js';
+import logger from "./logger.js";
 
 export default (app: Application): Application => {
   // Security middleware - disable CSP for Better Auth
@@ -26,12 +26,26 @@ export default (app: Application): Application => {
   // CORS configuration
   app.use(
     cors({
-      origin: constants.corsOrigin,
+      origin: (origin, callback) => {
+        const allowedOrigins = [
+          constants.corsOrigin,
+          constants.frontEndUrl,
+          "https://www.amfintrass.com",
+          "https://amfintrass.com",
+          "http://localhost:3000",
+        ];
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
       optionsSuccessStatus: 200,
-    })
+    }),
   );
 
   // Cookie parsing - Better Auth needs this early
