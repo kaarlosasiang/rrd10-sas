@@ -29,6 +29,37 @@ const subscriptionService = {
       throw error;
     }
   },
+
+  getSubscription: async (userId: string) => {
+    try {
+      const user = await User.findOne({
+        _id: new mongoose.Types.ObjectId(userId),
+      });
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  cancelSubscription: async (userId: string) => {
+    try {
+      const result = await User.updateOne(
+        { _id: new mongoose.Types.ObjectId(userId) },
+        {
+          $set: {
+            hasActiveSubscription: false,
+            subscriptionStatus: "cancelled",
+            subscriptionCancelledAt: new Date(),
+          },
+        }
+      );
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default subscriptionService;

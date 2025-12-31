@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { accountSchema } from "@rrd10-sas/validators";
 import accountsService from "./accountsService.js";
 import logger from "../../config/logger.js";
 
@@ -137,9 +138,19 @@ const accountsController = {
         });
       }
 
+      // Validate request body
+      const validationResult = accountSchema.safeParse(accountData);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation failed",
+          errors: validationResult.error.issues,
+        });
+      }
+
       const account = await accountsService.createAccount(
         companyId,
-        accountData
+        validationResult.data
       );
 
       return res.status(201).json({
@@ -177,10 +188,20 @@ const accountsController = {
         });
       }
 
+      // Validate request body (partial update)
+      const validationResult = accountSchema.partial().safeParse(updateData);
+      if (!validationResult.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation failed",
+          errors: validationResult.error.issues,
+        });
+      }
+
       const account = await accountsService.updateAccount(
         companyId,
         id,
-        updateData
+        validationResult.data
       );
 
       return res.status(200).json({

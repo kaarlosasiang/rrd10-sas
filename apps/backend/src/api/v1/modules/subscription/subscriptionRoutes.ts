@@ -9,4 +9,11 @@ subscriptionRoutes.post(
   subscriptionController.activateSubscription
 );
 
+subscriptionRoutes.get("/:userId", subscriptionController.getSubscription);
+
+subscriptionRoutes.delete(
+  "/:userId",
+  subscriptionController.cancelSubscription
+);
+
 export default subscriptionRoutes;

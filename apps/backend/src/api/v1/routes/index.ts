@@ -3,9 +3,10 @@ import { Application } from "express";
 import authRoutes from "../modules/auth/authRoutes.js";
 import subscriptionRoutes from "../modules/subscription/subscriptionRoutes.js";
 import accountsRoutes from "../modules/accounts/accountsRoutes.js";
+import companyRoutes from "../modules/company/companyRoutes.js";
+import inventoryRoutes from "../modules/inventory/inventoryRoutes.js";
 
-import companyRoutes from "./company.routes.js";
-import userRoutes from "./user.routes.js";
+import userRoutes from "../modules/user/userRoutes.js";
 
 /**
  * Register all API routes
@@ -29,6 +30,9 @@ export default (app: Application): void => {
 
   // Accounts routes
   app.use(`${API_PREFIX}/accounts`, accountsRoutes);
+
+  // Inventory routes
+  app.use(`${API_PREFIX}/inventory`, inventoryRoutes);
 
   // Add more routes here as needed
   // app.use(`${API_PREFIX}/clients`, clientRoutes);

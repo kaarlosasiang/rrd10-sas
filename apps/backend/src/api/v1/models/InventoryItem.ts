@@ -1,9 +1,11 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Model } from "mongoose";
 
 import {
   IInventoryItem,
   IInventoryItemDocument,
-} from '../shared/interface/IInventoryItem.js';
+  IInventoryItemModel,
+  IInventoryItemMethods,
+} from "../shared/interface/IInventoryItem.js";
 
 /**
  * Inventory Item Schema
@@ -95,7 +97,7 @@ const InventoryItemSchema = new Schema<IInventoryItem>(
   {
     timestamps: true,
     collection: "inventoryItems",
-  },
+  }
 );
 
 /**
@@ -133,12 +135,14 @@ InventoryItemSchema.virtual("needsReorder").get(function () {
  */
 InventoryItemSchema.methods.adjustQuantity = function (
   adjustment: number,
-  reason: string,
+  reason: string
 ) {
   const newQuantity = this.quantityOnHand + adjustment;
   if (newQuantity < 0) {
     throw new Error(
-      `Insufficient inventory. Available: ${this.quantityOnHand}, Requested: ${Math.abs(adjustment)}`,
+      `Insufficient inventory. Available: ${
+        this.quantityOnHand
+      }, Requested: ${Math.abs(adjustment)}`
     );
   }
   this.quantityOnHand = newQuantity;
@@ -171,7 +175,7 @@ InventoryItemSchema.methods.updateSellingPrice = function (newPrice: number) {
  * Static method: Find active items
  */
 InventoryItemSchema.statics.findActive = function (
-  companyId: mongoose.Types.ObjectId,
+  companyId: mongoose.Types.ObjectId
 ) {
   return this.find({ companyId, isActive: true }).sort({ itemName: 1 });
 };
@@ -181,7 +185,7 @@ InventoryItemSchema.statics.findActive = function (
  */
 InventoryItemSchema.statics.findByItemCode = function (
   companyId: mongoose.Types.ObjectId,
-  itemCode: string,
+  itemCode: string
 ) {
   return this.findOne({ companyId, itemCode: itemCode.toUpperCase() });
 };
@@ -191,7 +195,7 @@ InventoryItemSchema.statics.findByItemCode = function (
  */
 InventoryItemSchema.statics.findByCategory = function (
   companyId: mongoose.Types.ObjectId,
-  category: string,
+  category: string
 ) {
   return this.find({ companyId, category, isActive: true }).sort({
     itemName: 1,
@@ -202,7 +206,7 @@ InventoryItemSchema.statics.findByCategory = function (
  * Static method: Find items needing reorder
  */
 InventoryItemSchema.statics.findNeedingReorder = function (
-  companyId: mongoose.Types.ObjectId,
+  companyId: mongoose.Types.ObjectId
 ) {
   return this.find({
     companyId,
@@ -216,7 +220,7 @@ InventoryItemSchema.statics.findNeedingReorder = function (
  */
 InventoryItemSchema.statics.searchItems = function (
   companyId: mongoose.Types.ObjectId,
-  searchTerm: string,
+  searchTerm: string
 ) {
   const regex = new RegExp(searchTerm, "i");
   return this.find({
@@ -230,7 +234,7 @@ InventoryItemSchema.statics.searchItems = function (
  * Static method: Get total inventory value
  */
 InventoryItemSchema.statics.getTotalInventoryValue = async function (
-  companyId: mongoose.Types.ObjectId,
+  companyId: mongoose.Types.ObjectId
 ) {
   const result = await this.aggregate([
     {
@@ -256,8 +260,8 @@ InventoryItemSchema.statics.getTotalInventoryValue = async function (
  * Export the model
  */
 export const InventoryItem =
-  (mongoose.models.InventoryItem as mongoose.Model<IInventoryItemDocument>) ||
+  (mongoose.models.InventoryItem as any) ||
   mongoose.model<IInventoryItemDocument>(
     "InventoryItem",
-    InventoryItemSchema as any,
+    InventoryItemSchema as any
   );

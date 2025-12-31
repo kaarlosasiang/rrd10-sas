@@ -78,6 +78,27 @@ const userSchema = new Schema<IUser>(
       type: Date,
       required: [true, "Last activity is required"],
     },
+    hasActiveSubscription: {
+      type: Boolean,
+      default: false,
+    },
+    subscriptionPlan: {
+      type: String,
+    },
+    subscriptionStatus: {
+      type: String,
+      enum: ["active", "cancelled", "expired", null],
+      default: null,
+    },
+    subscriptionActivatedAt: {
+      type: Date,
+    },
+    subscriptionCancelledAt: {
+      type: Date,
+    },
+    companySetupCompletedAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt
